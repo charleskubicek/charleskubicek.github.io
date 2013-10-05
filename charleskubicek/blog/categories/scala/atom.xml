@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Scala | Scala Notebook]]></title>
+  <link href="http://charleskubicek.github.com/charleskubicek/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://charleskubicek.github.com/charleskubicek/"/>
+  <updated>2013-10-05T20:56:19+01:00</updated>
+  <id>http://charleskubicek.github.com/charleskubicek/</id>
+  <author>
+    <name><![CDATA[Charles Kubicek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Replace Iterations With Transformations]]></title>
+    <link href="http://charleskubicek.github.com/charleskubicek/blog/2012/12/20/replace-iterations-with-transformations/"/>
+    <updated>2012-12-20T17:07:00+00:00</updated>
+    <id>http://charleskubicek.github.com/charleskubicek/blog/2012/12/20/replace-iterations-with-transformations</id>
+    <content type="html"><![CDATA[<p><strong>The Scala collections library is extremely powerful and one of the most compelling parts of Scala. To use if effectively requires re-thinking the approach of programming with collections and data in general.</strong></p>
+
+<p>In Java we think about data processing in terms of iterations; we iterate over collections to create new collections by applying some logic. Here's a simple example:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Java Example  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Customer</span><span class="o">&gt;</span> <span class="n">customers</span> <span class="o">=</span> <span class="n">getCustomers</span><span class="o">()&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">for</span><span class="o">(</span><span class="n">Customer</span> <span class="nl">c:</span> <span class="n">customers</span><span class="o">){&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">age</span> <span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="mi">18</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">firstName</span><span class="o">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>At the core of data processing with Scala collections are functions which take other functions as parameters, known has <a href="http://en.wikipedia.org/wiki/Higher-order_function">higher-order functions</a> or <a href="http://en.wikipedia.org/wiki/Lambda_(programming">Lambda functions</a>). This relatively simple concept has a profound effect on not only how we do data processing, but how we think about data processing in general. In many cases the function parameter is defined anonymously without being part of a class or object.</p>
+
+<p>Here's what the above example looks like using higher-order functions in Scala:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Scala Example  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">customers</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">Customer</span><span class="o">]</span> <span class="k">=</span> <span class="n">getCustomers</span><span class="o">()&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">customers</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>           <span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">c</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">c</span><span class="o">.</span><span class="n">age</span> <span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="mi">18</span><span class="o">)</span>
+</span><span class='line'>           <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">c</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">c</span><span class="o">.</span><span class="n">firstName</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<ul>
+<li><p><strong>filter</strong> is a function on the customers List that takes a function as a parameter. The signature of filter states that the function parameter must take on parameter of the type contained in the collection, and return a boolean. <em>Filter</em> returns a new collection that contains the values which matched the function. You may hear the function parameter referred to as a <a href="http://en.wikipedia.org/wiki/Predicate_(mathematical_logic">predicate</a> when used in a filter.</p></li>
+<li><p><strong>map</strong> is also a method on the customers List that takes a function but in this case it can return anything. <em>Map</em> will return a new collection with the results of the function parameter applied to each element of the List. The idea is you're mapping from an input to an output.</p></li>
+</ul>
+
+
+<p>The example above could be shortened by replacing the 'c' value with an underscore to:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Underscores  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">customers</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>           <span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">age</span> <span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="mi">18</span><span class="o">)</span>
+</span><span class='line'>           <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">firstName</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The previous examples defined function parameters 'in-place', meaning they're defined at the point of use as opposed to being functions defined elsewhere and referenced but we could use pre-defined functions:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Pre-Defined functions  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">over18</span><span class="o">(</span><span class="n">age</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="mi">18</span>
+</span><span class='line'><span class="k">def</span> <span class="n">firstName</span><span class="o">(</span><span class="n">customer</span><span class="k">:</span><span class="kt">Customer</span><span class="o">)</span> <span class="k">=</span> <span class="n">customer</span><span class="o">.</span><span class="n">name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">customers</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>           <span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">over18</span><span class="o">)</span>
+</span><span class='line'>           <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">firstName</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The three Scala examples do the same thing, I'll let you decide which syntax you prefer. The important things to note about the Scala examples compared to the Java example is:</p>
+
+<ul>
+<li><strong>There is no longer a loop</strong> Both <em>map</em> and <em>filter</em> encapsulate the looping/iterating so you don't have to do it, you just provide the transformation function.</li>
+<li><strong>The List functions return new Lists</strong> This removes the need to define a collection to put results into, again this is taken care of for you. Under the covers it uses a <a href="http://en.wikipedia.org/wiki/Persistent_data_structure">Persistent Data Structure</a> for efficiency - it doesn't actually copy the values a new collection.</li>
+<li><strong>There is no longer an 'if' block</strong> <em>Filter</em> encapsulates the 'if' so you don't have to do it, you just provide the transformation function.</li>
+</ul>
+
+
+<p>With the iterations and conditional logic taken care of for you, all you have to do is provide the transformations you wish to happen as higher-order functions. Another bonus is that <strong>immutable</strong> programs are easier to write when using transformations as there is no need to define intermediate collections which contain results.</p>
+
+<p>After getting used to programming this way I have found that my code is clearer, there is less of it and it's easier to digest and verify. But I've also found the way I think about processing data has fundamentally changed. With fundamental concepts like map, filter and a few others I feel like I'm better able to visualise and think about how data in my program flows. I've also made less mistakes.</p>
+
+<p>The Scala collections library has many operations that you can use instead of writing iterations and the more familiar you are with them the better. Here are some of them to wet your appetite:</p>
+
+<ul>
+<li><strong>Map</strong> Transforms each item in the collection by applying a function</li>
+<li><strong>Filter</strong> Returns the items in a collection that match a predicate</li>
+<li><strong>Fold</strong> Accumulates items form collection into one single value</li>
+<li><strong>Flatten</strong> transforms a collection of collections into one collection</li>
+<li><strong>Zip</strong> transforms two collections into one containing pairs of items</li>
+<li><strong>Take</strong> returns the first <em>n</em> items in a collection</li>
+<li><strong>TakeWhile</strong> returns the first <em>n</em> number of items that match some predicate</li>
+<li><strong>Partition</strong> transforms a collection in to two collections according to some predicate</li>
+<li><strong>Slice</strong> Returns a given range of items from a collection</li>
+<li><strong>GroupBy</strong> groups items together according to a given function</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
