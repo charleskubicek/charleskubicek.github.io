@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Scala | Scala Notebook]]></title>
-  <link href="http://charleskubicek.github.com/charleskubicek/blog/categories/scala/atom.xml" rel="self"/>
-  <link href="http://charleskubicek.github.com/charleskubicek/"/>
-  <updated>2013-10-05T20:56:19+01:00</updated>
-  <id>http://charleskubicek.github.com/charleskubicek/</id>
+  <link href="http://charleskubicek.github.io/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://charleskubicek.github.io/"/>
+  <updated>2013-10-06T09:50:17+01:00</updated>
+  <id>http://charleskubicek.github.io/</id>
   <author>
     <name><![CDATA[Charles Kubicek]]></name>
     
@@ -15,14 +15,14 @@
   
   <entry>
     <title type="html"><![CDATA[Replace Iterations With Transformations]]></title>
-    <link href="http://charleskubicek.github.com/charleskubicek/blog/2012/12/20/replace-iterations-with-transformations/"/>
+    <link href="http://charleskubicek.github.io/blog/2012/12/20/replace-iterations-with-transformations/"/>
     <updated>2012-12-20T17:07:00+00:00</updated>
-    <id>http://charleskubicek.github.com/charleskubicek/blog/2012/12/20/replace-iterations-with-transformations</id>
+    <id>http://charleskubicek.github.io/blog/2012/12/20/replace-iterations-with-transformations</id>
     <content type="html"><![CDATA[<p><strong>The Scala collections library is extremely powerful and one of the most compelling parts of Scala. To use if effectively requires re-thinking the approach of programming with collections and data in general.</strong></p>
 
-<p>In Java we think about data processing in terms of iterations; we iterate over collections to create new collections by applying some logic. Here's a simple example:</p>
+<p>In Java we think about data processing in terms of iterations; we iterate over collections to create new collections by applying some logic. Here&rsquo;s a simple example:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Java Example  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Java Example </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -51,9 +51,9 @@
 
 <p>At the core of data processing with Scala collections are functions which take other functions as parameters, known has <a href="http://en.wikipedia.org/wiki/Higher-order_function">higher-order functions</a> or <a href="http://en.wikipedia.org/wiki/Lambda_(programming">Lambda functions</a>). This relatively simple concept has a profound effect on not only how we do data processing, but how we think about data processing in general. In many cases the function parameter is defined anonymously without being part of a class or object.</p>
 
-<p>Here's what the above example looks like using higher-order functions in Scala:</p>
+<p>Here&rsquo;s what the above example looks like using higher-order functions in Scala:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Scala Example  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Scala Example </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -76,13 +76,13 @@
 
 <ul>
 <li><p><strong>filter</strong> is a function on the customers List that takes a function as a parameter. The signature of filter states that the function parameter must take on parameter of the type contained in the collection, and return a boolean. <em>Filter</em> returns a new collection that contains the values which matched the function. You may hear the function parameter referred to as a <a href="http://en.wikipedia.org/wiki/Predicate_(mathematical_logic">predicate</a> when used in a filter.</p></li>
-<li><p><strong>map</strong> is also a method on the customers List that takes a function but in this case it can return anything. <em>Map</em> will return a new collection with the results of the function parameter applied to each element of the List. The idea is you're mapping from an input to an output.</p></li>
+<li><p><strong>map</strong> is also a method on the customers List that takes a function but in this case it can return anything. <em>Map</em> will return a new collection with the results of the function parameter applied to each element of the List. The idea is you&rsquo;re mapping from an input to an output.</p></li>
 </ul>
 
 
-<p>The example above could be shortened by replacing the 'c' value with an underscore to:</p>
+<p>The example above could be shortened by replacing the &lsquo;c&rsquo; value with an underscore to:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Underscores  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Underscores </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -99,9 +99,9 @@
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>The previous examples defined function parameters 'in-place', meaning they're defined at the point of use as opposed to being functions defined elsewhere and referenced but we could use pre-defined functions:</p>
+<p>The previous examples defined function parameters &lsquo;in-place&rsquo;, meaning they&rsquo;re defined at the point of use as opposed to being functions defined elsewhere and referenced but we could use pre-defined functions:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Pre-Defined functions  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>With Pre-Defined functions </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -124,18 +124,18 @@
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>The three Scala examples do the same thing, I'll let you decide which syntax you prefer. The important things to note about the Scala examples compared to the Java example is:</p>
+<p>The three Scala examples do the same thing, I&rsquo;ll let you decide which syntax you prefer. The important things to note about the Scala examples compared to the Java example is:</p>
 
 <ul>
-<li><strong>There is no longer a loop</strong> Both <em>map</em> and <em>filter</em> encapsulate the looping/iterating so you don't have to do it, you just provide the transformation function.</li>
-<li><strong>The List functions return new Lists</strong> This removes the need to define a collection to put results into, again this is taken care of for you. Under the covers it uses a <a href="http://en.wikipedia.org/wiki/Persistent_data_structure">Persistent Data Structure</a> for efficiency - it doesn't actually copy the values a new collection.</li>
-<li><strong>There is no longer an 'if' block</strong> <em>Filter</em> encapsulates the 'if' so you don't have to do it, you just provide the transformation function.</li>
+<li><strong>There is no longer a loop</strong> Both <em>map</em> and <em>filter</em> encapsulate the looping/iterating so you don&rsquo;t have to do it, you just provide the transformation function.</li>
+<li><strong>The List functions return new Lists</strong> This removes the need to define a collection to put results into, again this is taken care of for you. Under the covers it uses a <a href="http://en.wikipedia.org/wiki/Persistent_data_structure">Persistent Data Structure</a> for efficiency &ndash; it doesn&rsquo;t actually copy the values a new collection.</li>
+<li><strong>There is no longer an &lsquo;if&rsquo; block</strong> <em>Filter</em> encapsulates the &lsquo;if&rsquo; so you don&rsquo;t have to do it, you just provide the transformation function.</li>
 </ul>
 
 
 <p>With the iterations and conditional logic taken care of for you, all you have to do is provide the transformations you wish to happen as higher-order functions. Another bonus is that <strong>immutable</strong> programs are easier to write when using transformations as there is no need to define intermediate collections which contain results.</p>
 
-<p>After getting used to programming this way I have found that my code is clearer, there is less of it and it's easier to digest and verify. But I've also found the way I think about processing data has fundamentally changed. With fundamental concepts like map, filter and a few others I feel like I'm better able to visualise and think about how data in my program flows. I've also made less mistakes.</p>
+<p>After getting used to programming this way I have found that my code is clearer, there is less of it and it&rsquo;s easier to digest and verify. But I&rsquo;ve also found the way I think about processing data has fundamentally changed. With fundamental concepts like map, filter and a few others I feel like I&rsquo;m better able to visualise and think about how data in my program flows. I&rsquo;ve also made less mistakes.</p>
 
 <p>The Scala collections library has many operations that you can use instead of writing iterations and the more familiar you are with them the better. Here are some of them to wet your appetite:</p>
 
